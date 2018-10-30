@@ -74,6 +74,16 @@ class Vehicle extends Dbh
         return $this->returnValue;
     }
 
+    public function updateVehicle($vehicleId, $vehichleModelId, $vehicleMake, $vehicleColor)
+    {
+        $stmtInsertVehicles = $this->connect()->prepare("UPDATE vehicle SET fk_vehicle_model_id = ?, vehicle_make = ?, vehicle_color =? WHERE vehicle_id = ?");
+        $stmtInsertVehicles->execute([$vehichleModelId, $vehicleMake, $vehicleColor, $vehicleId,]);
+        
+        $this->returnValue = "Success";
+
+        return $this->returnValue;
+    }
+
     public function getModelList()
     {
         $stmtGetModels = $this->connect()->prepare("SELECT vehicle_model_id, vehicle_model_model FROM vehicle_model ORDER BY vehicle_model_model ASC");

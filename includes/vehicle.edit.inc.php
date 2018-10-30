@@ -7,7 +7,8 @@ if (isset($_POST['submit'])) {
     $vehichleModelId = $_POST['vehicleModel'];
     $vehicleMake = $_POST['vehicleMake'];
     $vehicleColor = $_POST['vehicleColor'];
+    $vehicleId = $_POST['vehicleId'];
     //$objectDb = new Dbh;
     $objectVehicle = new Vehicle;
-    $vehicleSave = $objectVehicle->insertVehicle($vehichleModelId, $vehicleMake, $vehicleColor);
+    $vehicleSave = $objectVehicle->updateVehicle($vehicleId,$vehichleModelId, $vehicleMake, $vehicleColor);
 }

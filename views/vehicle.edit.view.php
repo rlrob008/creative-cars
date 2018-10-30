@@ -40,14 +40,14 @@
 
             <div class="row mt-5 justify-content-center">
                 <div class="col-md-6">
-                <form id="formMotorVehicle" class="form" action="includes/vehicle.edit.inc.php" method="POST">
+                <form id="formMotorVehicle2" class="form" action="includes/vehicle.edit.inc.php" method="POST">
                     <div class="row m-2">
                         <div class="input-group input-group-sm mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text font-weight-bold">Model</span>
                             </div>
-                            <input type="hidden" id="vehicle-id" class="form-control" value="" required readonly>
-                            <input type="hidden" id="vehicle-model-id" class="form-control" value="" required readonly>
+                            <input type="hidden" id="vehicle-id" class="form-control" value="<?php echo $_POST['vid']; ?>">
+                            <input type="hidden" id="vehicle-model-id" class="form-control" value="">
                             <select id="vehicle-model" class="form-control">
                                 <?php 
                                     include 'includes/classes/dbh.inc.php';
