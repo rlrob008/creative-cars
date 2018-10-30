@@ -21,7 +21,7 @@ class Vehicle extends Dbh
                 $stmtGetCurrentModel = $this->connect()->prepare("SELECT vehicle_model_model FROM vehicle_model WHERE vehicle_model_id = ?");
                 $stmtGetCurrentModel->execute([$vehicleCurrentModelId]);
                 $rowGetCurrentModel = $stmtGetCurrentModel->fetch();
-                $this->returnValue = $this->returnValue.'<tr><td>'.$rowGetCurrentModel['vehicle_model_model'].'</td><td>'.$rowGetVehicles['vehicle_make'].'</td><td>'.$rowGetVehicles['vehicle_color'].'</td><td><form action="vehicle.edit.php" method="post" class="mb-2"><input type="hidden" name="vid" id="vid" value="'.$rowGetVehicles['vehicle_id'].'"><input type="submit" class="btn btn-sm btn-warning btn-block" value="Edit"></form> <form action="vehicle.delete.php"><input type="hidden" name="vid2" id="vid2" value="'.$rowGetVehicles['vehicle_id'].'"><input type="submit" id="deleteVehicle" class="btn btn-sm btn-error btn-block" value="Delete"></form></td></tr>';
+                $this->returnValue = $this->returnValue.'<tr><td>'.$rowGetCurrentModel['vehicle_model_model'].'</td><td>'.$rowGetVehicles['vehicle_make'].'</td><td>'.$rowGetVehicles['vehicle_color'].'</td><td><form action="vehicle.edit.php" method="post" class="mb-2"><input type="hidden" name="vid" id="vid" value="'.$rowGetVehicles['vehicle_id'].'"><input type="submit" class="btn btn-sm btn-warning btn-block" value="Edit"></form> <form action="vehicle.delete.php" method="post"><input type="hidden" name="vid2" id="vid2" value="'.$rowGetVehicles['vehicle_id'].'"><input type="submit" id="deleteVehicle" class="btn btn-sm btn-error btn-block" value="Delete"></form></td></tr>';
             }
         } else {
             $this->returnValue = '<tr><td>No cars loaded.</td><td></td><td></td><td></td></tr>';
@@ -33,7 +33,7 @@ class Vehicle extends Dbh
     public function deleteVehicle($vehicleId)
     {
         $stmtDeleteVehicles = $this->connect()->prepare("DELETE FROM vehicle WHERE vehicle_id = ?");
-        $stmtDeleteVehicles->execute();
+        $stmtDeleteVehicles->execute([$vehicleId]);
         $this->returnValue = "deleted";
 
         return $this->returnValue;
