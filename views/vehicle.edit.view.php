@@ -55,9 +55,9 @@
                                     $vehicles = new Vehicle;
                                     $vid = $_POST['vid'];
 
-                                    $vehicles->getCurrentVehicle($vid);
+                                    echo $vehicles->getCurrentVehicle($vid);
 
-                                    echo $vehicles->getModelList();
+                                    //echo $vehicles->getModelList();
                                 ?>
                             </select>
                         </div>
@@ -67,7 +67,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text font-weight-bold">Make</span>
                             </div>
-                            <input type="text" id="vehicle-make" class="form-control" value="" required>
+                            <input type="text" id="vehicle-make" class="form-control" value="<?php echo $_POST['vmake']; ?>" required>
                         </div>
                     </div>
                     <div class="row m-2">
@@ -75,7 +75,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text font-weight-bold">Colour</span>
                             </div>
-                            <input type="text" class="form-control" id="vehicle-colour">
+                            <input type="text" class="form-control" id="vehicle-colour" value="<?php echo $_POST['vcolor']; ?>">
                         </div>
                     </div>
                     <div class="row m-2">

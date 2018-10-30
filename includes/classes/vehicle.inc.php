@@ -21,7 +21,7 @@ class Vehicle extends Dbh
                 $stmtGetCurrentModel = $this->connect()->prepare("SELECT vehicle_model_model FROM vehicle_model WHERE vehicle_model_id = ?");
                 $stmtGetCurrentModel->execute([$vehicleCurrentModelId]);
                 $rowGetCurrentModel = $stmtGetCurrentModel->fetch();
-                $this->returnValue = $this->returnValue.'<tr><td>'.$rowGetCurrentModel['vehicle_model_model'].'</td><td>'.$rowGetVehicles['vehicle_make'].'</td><td>'.$rowGetVehicles['vehicle_color'].'</td><td><form action="vehicle.edit.php" method="post" class="mb-2"><input type="hidden" name="vid" id="vid" value="'.$rowGetVehicles['vehicle_id'].'"><input type="submit" class="btn btn-sm btn-warning btn-block" value="Edit"></form> <form action="vehicle.delete.php" method="post"><input type="hidden" name="vid2" id="vid2" value="'.$rowGetVehicles['vehicle_id'].'"><input type="submit" id="deleteVehicle" class="btn btn-sm btn-error btn-block" value="Delete"></form></td></tr>';
+                $this->returnValue = $this->returnValue.'<tr><td>'.$rowGetCurrentModel['vehicle_model_model'].'</td><td>'.$rowGetVehicles['vehicle_make'].'</td><td>'.$rowGetVehicles['vehicle_color'].'</td><td><form action="vehicle.edit.php" method="post" class="mb-2"><input type="hidden" name="vid" id="vid" value="'.$rowGetVehicles['vehicle_id'].'"><input type="hidden" name="vmake" id="vmake" value="'.$rowGetVehicles['vehicle_make'].'"><input type="hidden" name="vcolor" id="vcolor" value="'.$rowGetVehicles['vehicle_color'].'"><input type="submit" class="btn btn-sm btn-warning btn-block" value="Edit"></form> <form action="vehicle.delete.php" method="post"><input type="hidden" name="vid2" id="vid2" value="'.$rowGetVehicles['vehicle_id'].'"><input type="submit" id="deleteVehicle" class="btn btn-sm btn-error btn-block" value="Delete"></form></td></tr>';
             }
         } else {
             $this->returnValue = '<tr><td>No cars loaded.</td><td></td><td></td><td></td></tr>';
@@ -32,20 +32,21 @@ class Vehicle extends Dbh
 
     public function getCurrentVehicle($vid)
     {
-        $stmtGetVehicles = $this->connect()->prepare("SELECT fk_vehicle_model_id FROM vehicle WHERE vehicle_id = ?");
-        $stmtGetVehicles->execute([$vid]);
+        $stmtGetModels = $this->connect()->prepare("SELECT vehicle_model_id, vehicle_model_model FROM vehicle_model ORDER BY vehicle_model_model ASC");
+        $stmtGetModels->execute();
         
         $this->returnValue = "";
-        if($stmtGetVehicles->rowCount()){
-            while($rowGetVehicles = $stmtGetVehicles->fetch()){
-                $vehicleCurrentModelId = $rowGetVehicles['fk_vehicle_model_id'];
-                $stmtGetCurrentModel = $this->connect()->prepare("SELECT vehicle_model_model FROM vehicle_model WHERE vehicle_model_id = ?");
-                $stmtGetCurrentModel->execute([$vehicleCurrentModelId]);
+        if($stmtGetModels->rowCount()){
+            while($rowGetModels = $stmtGetModels->fetch()){
+                $stmtGetCurrentModel = $this->connect()->prepare("SELECT fk_vehicle_model_id FROM vehicle WHERE vehicle_id = ?");
+                $stmtGetCurrentModel->execute([$vid]);
                 $rowGetCurrentModel = $stmtGetCurrentModel->fetch();
-                $this->returnValue = $this->returnValue.'<tr><td>'.$rowGetCurrentModel['vehicle_model_model'].'</td><td>'.$rowGetVehicles['vehicle_make'].'</td><td>'.$rowGetVehicles['vehicle_color'].'</td><td><form action="vehicle.edit.php" method="post" class="mb-2"><input type="hidden" name="vid" id="vid" value="'.$rowGetVehicles['vehicle_id'].'"><input type="submit" class="btn btn-sm btn-warning btn-block" value="Edit"></form> <form action="vehicle.delete.php" method="post"><input type="hidden" name="vid2" id="vid2" value="'.$rowGetVehicles['vehicle_id'].'"><input type="submit" id="deleteVehicle" class="btn btn-sm btn-error btn-block" value="Delete"></form></td></tr>';
+                if ($rowGetModels['vehicle_model_id']==$rowGetCurrentModel['fk_vehicle_model_id']){
+                    $this->returnValue = $this->returnValue.'<option value="'.$rowGetModels['vehicle_model_id'].'" selected>'.$rowGetModels['vehicle_model_model'].'</option>';
+                } else {
+                    $this->returnValue = $this->returnValue.'<option value="'.$rowGetModels['vehicle_model_id'].'">'.$rowGetModels['vehicle_model_model'].'</option>';
+                }
             }
-        } else {
-            $this->returnValue = '<tr><td>No cars loaded.</td><td></td><td></td><td></td></tr>';
         }
 
         return $this->returnValue;
